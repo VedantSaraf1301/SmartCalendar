@@ -88,8 +88,8 @@ export function WallCalendar() {
   const today = new Date();
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [fading, setFading] = useState(false);
-  const [startDate,setStartDate] = useState(null);
-  const [endDate,setEndDate] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   const calendarDays = getCalendarGrid(YEAR, currentMonth);
 
@@ -118,7 +118,7 @@ export function WallCalendar() {
     }, 220);
   };
 
-  
+
   // const jumpToMonth = (month) => {
   //   if (month === currentMonth) return;
   //   setFading(true);
@@ -140,7 +140,7 @@ export function WallCalendar() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center select-none"
+      className="min-h-screen flex flex-col items-center justify-center select-none px-4 py-12"
       style={{
         background:
           "radial-gradient(ellipse at 50% 30%, #d6d6d6 0%, #b8b8b8 60%, #a8a8a8 100%)",
@@ -148,7 +148,8 @@ export function WallCalendar() {
     >
       <WallTexture />
 
-      <div className="relative flex items-center gap-6">
+      {/* ── Desktop layout: prev | card | next ── */}
+      <div className="hidden sm:flex relative items-center gap-6">
         <NavArrow direction="prev" onClick={() => changeMonth(-1)} />
 
         {/* Calendar assembly */}
@@ -201,7 +202,99 @@ export function WallCalendar() {
         <NavArrow direction="next" onClick={() => changeMonth(1)} />
       </div>
 
-      <MonthDots currentMonth={currentMonth} onSelect={jumpToMonth} />
+      {/* Desktop dots */}
+      <div className="hidden sm:flex gap-2 mt-8">
+        {Array.from({ length: 12 }).map((_, i) => (
+          <button
+            key={i}
+            onClick={() => jumpToMonth(i)}
+            style={{
+              width: i === currentMonth ? 20 : 7,
+              height: 7,
+              borderRadius: 4,
+              background: i === currentMonth ? "#1aaede" : "rgba(255,255,255,0.5)",
+              border: "none",
+              cursor: "pointer",
+              transition: "all 0.3s ease",
+              padding: 0,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* ── Mobile layout: card → dots → arrows ── */}
+      <div className="flex sm:hidden flex-col items-center gap-5 w-full">
+        {/* Calendar assembly */}
+        <div className="relative w-full" style={{ maxWidth: 380 }}>
+          {/* Drop shadow */}
+          <div
+            className="absolute inset-0"
+            style={{
+              top: 28,
+              boxShadow:
+                "0 25px 60px rgba(0,0,0,0.45), 0 8px 20px rgba(0,0,0,0.25)",
+              borderRadius: "0 0 12px 12px",
+            }}
+          />
+
+          <WallNail />
+
+          <div
+            className="relative bg-white overflow-hidden"
+            style={{
+              marginTop: 14,
+              borderRadius: "0 0 10px 10px",
+              transform: "rotate(0.15deg)",
+            }}
+          >
+            <CoilStrip />
+
+            <PhotoSection
+              imageUrl={MONTH_IMAGES[currentMonth]}
+              monthName={MONTH_NAMES[currentMonth]}
+              fading={fading}
+            />
+
+            <CalendarGrid days={calendarDays} currentMonth={currentMonth} startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
+
+            <div
+              className="absolute bottom-0 left-0 right-0 h-2 pointer-events-none"
+              style={{
+                background:
+                  "linear-gradient(to bottom, transparent, rgba(0,0,0,0.04))",
+              }}
+            />
+          </div>
+
+          <PageStack />
+        </div>
+
+        {/* Mobile dots */}
+        <div className="flex gap-2">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => jumpToMonth(i)}
+              style={{
+                width: i === currentMonth ? 20 : 7,
+                height: 7,
+                borderRadius: 4,
+                background: i === currentMonth ? "#1aaede" : "rgba(255,255,255,0.5)",
+                border: "none",
+                cursor: "pointer",
+                transition: "all 0.3s ease",
+                padding: 0,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Mobile prev / next row */}
+        <div className="flex justify-between w-full" style={{ maxWidth: 380 }}>
+          <NavArrow direction="prev" onClick={() => changeMonth(-1)} />
+          <NavArrow direction="next" onClick={() => changeMonth(1)} />
+        </div>
+      </div>
     </div>
   );
 }
