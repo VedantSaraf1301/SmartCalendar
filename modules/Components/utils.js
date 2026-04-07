@@ -8,6 +8,7 @@
 export function getCalendarGrid(year, month){
   const firstDay = new Date(year, month, 1).getDay();
   // Convert Sunday=0 → Monday-first offset (Mon=0 … Sun=6)
+  //Just like giving index to the fellow days
   const startOffset = firstDay === 0 ? 6 : firstDay - 1;
 
   const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -15,7 +16,7 @@ export function getCalendarGrid(year, month){
 
   const days = [];
 
-  // Trailing days from previous month
+  //these keep track of trailing days from previous month
   for (let i = startOffset - 1; i >= 0; i--) {
     days.push({ day: daysInPrevMonth - i, type: "prev" });
   }

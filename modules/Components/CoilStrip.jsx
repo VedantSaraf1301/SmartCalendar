@@ -1,7 +1,7 @@
 "use client"
 import React from "react";
 
-/** A single metallic coil ring */
+
 const CoilRing = () => (
   <div
     style={{
@@ -18,7 +18,7 @@ const CoilRing = () => (
   />
 );
 
-/** Full spiral coil strip rendered across the top of the calendar */
+
 export function CoilStrip() {
   return (
     <div

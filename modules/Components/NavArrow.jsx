@@ -2,7 +2,7 @@
 import React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-/** Frosted-glass circular arrow button for month navigation */
+
 export function NavArrow({ direction, onClick }) {
   return (
     <button

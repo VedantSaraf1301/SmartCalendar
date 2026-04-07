@@ -2,7 +2,7 @@
 import React from "react";
 import { DAY_LABELS, YEAR } from "./constants";
 
-/** Ruled notes section on the left side */
+
 function NotesSection() {
   return (
     <div className="w-full sm:w-[110px] sm:flex-shrink-0" style={{ paddingTop: 2 }}>
@@ -30,7 +30,7 @@ function NotesSection() {
   );
 }
 
-/** Day headers row (MON – SUN) */
+
 function DayHeaders() {
   return (
     <div
@@ -60,7 +60,7 @@ function DayHeaders() {
   );
 }
 
-/** Individual day cell */
+
 function DayCell({ d, index, currentMonth, startDate, endDate, setStartDate, setEndDate }) {
   const today = new Date();
   const colIndex = index % 7;
@@ -115,8 +115,7 @@ function DayCell({ d, index, currentMonth, startDate, endDate, setStartDate, set
     cellDate > startDate &&
     cellDate < endDate;
 
-  // ── Band background layer (sits behind the dot) ──────────────────────────
-  // The band fills the full cell height on in-range days, and only half on caps.
+ 
   let bandStyle = null;
   const bandHeight = 26;
   const bandColor = "rgba(26,174,222,0.13)";
@@ -159,7 +158,7 @@ function DayCell({ d, index, currentMonth, startDate, endDate, setStartDate, set
     };
   }
 
-  // ── Dot / number layer ────────────────────────────────────────────────────
+  
   let dotStyle = {
     position: "relative",
     zIndex: 1,

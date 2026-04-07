@@ -94,19 +94,6 @@ export default function ChevronBanner({
         width="100%"
         height="78"
       >
-        {/* ✅ Both gradients defined here, inside the SVG */}
-        <defs>
-          <linearGradient id="chevGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="rgba(255,255,255,0.18)" />
-            <stop offset="100%" stopColor="rgba(0,0,0,0.08)" />
-          </linearGradient>
-          <linearGradient id="fadingGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="rgba(26,174,222,0)" />
-            <stop offset="80%" stopColor="rgba(26,174,222,0.4)" />
-            <stop offset="100%" stopColor="rgba(26,174,222,0.8)" />
-          </linearGradient>
-        </defs>
-
         {renderShape()}
       </svg>
 

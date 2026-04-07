@@ -2,7 +2,7 @@
 import React from "react";
 import { MONTH_NAMES } from "./constants";
 
-/** Pill-shaped dot indicators for quick month navigation */
+
 export function MonthDots({ currentMonth, onSelect }) {
   return (
     <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">

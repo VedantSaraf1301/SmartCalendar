@@ -8,7 +8,7 @@ import { CalendarGrid } from "../Components/CalendarGrid";
 import { MonthDots } from "../Components/MonthDots";
 import { NavArrow } from "../Components/NavArrow";
 
-/** Metallic nail/tack that the calendar hangs from */
+
 function WallNail() {
   return (
     <div
@@ -37,7 +37,7 @@ function WallNail() {
   );
 }
 
-/** Stacked paper layers peeking below the calendar card */
+
 function PageStack() {
   return (
     <>
@@ -69,7 +69,7 @@ function PageStack() {
   );
 }
 
-/** Wall texture overlay */
+
 function WallTexture() {
   return (
     <div
@@ -83,7 +83,7 @@ function WallTexture() {
   );
 }
 
-/** Main wall calendar component */
+
 export function WallCalendar() {
   const today = new Date();
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
@@ -110,7 +110,7 @@ export function WallCalendar() {
     setTimeout(() => {
       setCurrentMonth(month);
 
-      // 🔥 Reset selection
+     
       setStartDate(null);
       setEndDate(null);
 
@@ -121,7 +121,7 @@ export function WallCalendar() {
 
   
 
-  // Preload adjacent month images
+
   useEffect(() => {
     const prev = (currentMonth - 1 + 12) % 12;
     const next = (currentMonth + 1) % 12;
@@ -133,7 +133,7 @@ export function WallCalendar() {
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center justify-center select-none px-4 py-12"
+      className="min-h-screen flex flex-col items-center justify-center select-none px-4 py-12 rounded-3xl"
       style={{
         background:
           "radial-gradient(ellipse at 50% 30%, #d6d6d6 0%, #b8b8b8 60%, #a8a8a8 100%)",
@@ -141,13 +141,13 @@ export function WallCalendar() {
     >
       <WallTexture />
 
-      {/* ── Desktop layout: prev | card | next ── */}
+      
       <div className="hidden sm:flex relative items-center gap-6">
         <NavArrow direction="prev" onClick={() => changeMonth(-1)} />
 
-        {/* Calendar assembly */}
+       
         <div className="relative" style={{ width: 380 }}>
-          {/* Drop shadow layer */}
+        
           <div
             className="absolute inset-0"
             style={{
@@ -160,7 +160,7 @@ export function WallCalendar() {
 
           <WallNail />
 
-          {/* Calendar card */}
+         
           <div
             className="relative bg-white overflow-hidden"
             style={{
@@ -179,7 +179,7 @@ export function WallCalendar() {
 
             <CalendarGrid days={calendarDays} currentMonth={currentMonth} startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
 
-            {/* Bottom paper edge shadow */}
+         
             <div
               className="absolute bottom-0 left-0 right-0 h-2 pointer-events-none"
               style={{
@@ -195,7 +195,7 @@ export function WallCalendar() {
         <NavArrow direction="next" onClick={() => changeMonth(1)} />
       </div>
 
-      {/* Desktop dots */}
+     
       <div className="hidden sm:flex gap-2 mt-8">
         {Array.from({ length: 12 }).map((_, i) => (
           <button
@@ -215,11 +215,10 @@ export function WallCalendar() {
         ))}
       </div>
 
-      {/* ── Mobile layout: card → dots → arrows ── */}
       <div className="flex sm:hidden flex-col items-center gap-5 w-full">
-        {/* Calendar assembly */}
+    
         <div className="relative w-full" style={{ maxWidth: 380 }}>
-          {/* Drop shadow */}
+     
           <div
             className="absolute inset-0"
             style={{
@@ -262,7 +261,7 @@ export function WallCalendar() {
           <PageStack />
         </div>
 
-        {/* Mobile dots */}
+        
         <div className="flex gap-2">
           {Array.from({ length: 12 }).map((_, i) => (
             <button
@@ -282,7 +281,7 @@ export function WallCalendar() {
           ))}
         </div>
 
-        {/* Mobile prev / next row */}
+      
         <div className="flex justify-between w-full" style={{ maxWidth: 380 }}>
           <NavArrow direction="prev" onClick={() => changeMonth(-1)} />
           <NavArrow direction="next" onClick={() => changeMonth(1)} />
