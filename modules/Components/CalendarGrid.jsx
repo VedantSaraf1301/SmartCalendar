@@ -5,7 +5,7 @@ import { DAY_LABELS, YEAR } from "./constants";
 /** Ruled notes section on the left side */
 function NotesSection() {
   return (
-    <div style={{ width: 110, paddingTop: 2, flexShrink: 0 }}>
+    <div className="w-full sm:w-[110px] sm:flex-shrink-0" style={{ paddingTop: 2 }}>
       <p
         style={{
           fontSize: 9,
@@ -291,18 +291,25 @@ export function CalendarGrid({ days, currentMonth, startDate, endDate, setStartD
         flexDirection: "column",
       }}
     >
-      <div style={{ display: "flex", gap: 12 }}>
+      <div className="flex flex-col sm:flex-row gap-3">
         {/* Notes */}
         <NotesSection />
 
-        {/* Divider */}
+        {/* Vertical divider — desktop only */}
         <div
+          className="hidden sm:block"
           style={{
             width: 1,
             background: "#e8e8e8",
             alignSelf: "stretch",
             flexShrink: 0,
           }}
+        />
+
+        {/* Horizontal divider — mobile only */}
+        <div
+          className="block sm:hidden"
+          style={{ height: 1, background: "#e8e8e8" }}
         />
 
         {/* Grid */}

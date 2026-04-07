@@ -15,9 +15,9 @@ export const MONTH_IMAGES = [
   // March
   "https://images.unsplash.com/photo-1551757891-24a8dabd2708?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   // April
-  "https://images.unsplash.com/photo-1717814417707-2280a1aa8e2c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxncmVlbiUyMG1lYWRvdyUyMHdpbGRmbG93ZXJzJTIwc3ByaW5nfGVufDF8fHx8MTc3NTU3MDk2M3ww&ixlib=rb-4.1.0&q=80&w=1080",
+  "https://media.istockphoto.com/id/1224021113/photo/indian-cameleers-camel-driver-with-camel-silhouettes-in-dunes-on-sunset-jaisalmer-rajasthan.webp?a=1&b=1&s=612x612&w=0&k=20&c=DgMNlnNSzsOfPvu3OSDGUg1oJTwpXyc0gbmI9N_a-c0=",
   // May 
-  "https://images.unsplash.com/photo-1723784037687-edb3a4959c22?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0cm9waWNhbCUyMGp1bmdsZSUyMHdhdGVyZmFsbHxlbnwxfHx8fDE3NzU1NzA5NjR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+  "https://media.istockphoto.com/id/1164517176/photo/historic-howrah-bridge-with-boat-on-river-ganges-at-kolkata-india.webp?a=1&b=1&s=612x612&w=0&k=20&c=gBbT6OFsMugRnSG36qUQeU2cpd7MyMk52BgX_XOYMQg=",
   // June
   "https://media.istockphoto.com/id/543328674/photo/indian-monsoon-2016.webp?a=1&b=1&s=612x612&w=0&k=20&c=84EVKmpF-s_XDmWzvdE7TmxHKMxPGcn0pyI3CSH-aho=",
   // July
@@ -25,7 +25,7 @@ export const MONTH_IMAGES = [
   // August 
   "https://images.unsplash.com/photo-1722326836324-a04ef7517901?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   // September 
-  "https://images.unsplash.com/photo-1664493115827-573d5669f032?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhdXR1bW4lMjBmYWxsJTIwZm9saWFnZSUyMGZvcmVzdHxlbnwxfHx8fDE3NzU1NzA5NjR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+  "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   // October 
   "https://images.unsplash.com/photo-1728921957375-877340feaf6a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8ZHVyZ2ElMjBwdWphfGVufDB8fDB8fHww",
   // November 
