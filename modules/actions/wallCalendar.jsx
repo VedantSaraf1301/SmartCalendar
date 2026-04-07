@@ -88,6 +88,8 @@ export function WallCalendar() {
   const today = new Date();
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [fading, setFading] = useState(false);
+  const [startDate,setStartDate] = useState(null);
+  const [endDate,setEndDate] = useState(null);
 
   const calendarDays = getCalendarGrid(YEAR, currentMonth);
 
@@ -95,18 +97,36 @@ export function WallCalendar() {
     setFading(true);
     setTimeout(() => {
       setCurrentMonth((m) => (m + delta + 12) % 12);
+      setStartDate(null);
+      setEndDate(null);
       setFading(false);
     }, 220);
   };
 
   const jumpToMonth = (month) => {
     if (month === currentMonth) return;
+
     setFading(true);
     setTimeout(() => {
       setCurrentMonth(month);
+
+      // 🔥 Reset selection
+      setStartDate(null);
+      setEndDate(null);
+
       setFading(false);
     }, 220);
   };
+
+  
+  // const jumpToMonth = (month) => {
+  //   if (month === currentMonth) return;
+  //   setFading(true);
+  //   setTimeout(() => {
+  //     setCurrentMonth(month);
+  //     setFading(false);
+  //   }, 220);
+  // };
 
   // Preload adjacent month images
   useEffect(() => {
@@ -163,7 +183,7 @@ export function WallCalendar() {
               fading={fading}
             />
 
-            <CalendarGrid days={calendarDays} currentMonth={currentMonth} />
+            <CalendarGrid days={calendarDays} currentMonth={currentMonth} startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
 
             {/* Bottom paper edge shadow */}
             <div
