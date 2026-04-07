@@ -1,9 +1,85 @@
-"use client"
+"use client";
 import React from "react";
 import { YEAR } from "./constants";
 
+export default function ChevronBanner({
+  monthName,
+  fading,
+  variant = "chevron",
+}) {
+  const renderShape = () => {
+    switch (variant) {
 
-function ChevronBanner({ monthName, fading }) {
+      case "stepped":
+        return (
+          <path
+            d="M0,78 L0,40 L100,40 L100,50 L200,50 L200,35 L300,35 L300,50 L400,50 L400,78 Z"
+            fill="url(#chevGrad)"
+          />
+        );
+
+      case "triangle":
+        return <polygon points="0,78 200,30 400,78" fill="url(#chevGrad)" />;
+
+      case "smooth-wave":
+        return (
+          <path
+            d="M0,65 C100,35 100,95 200,65 C300,35 300,95 400,65 L400,78 L0,78 Z"
+            fill="url(#chevGrad)"
+          />
+        );
+
+      case "jagged":
+        return (
+          <path
+            d="M0,78 L0,50 L50,70 L100,40 L150,65 L200,45 L250,60 L300,50 L350,70 L400,45 L400,78 Z"
+            fill="url(#chevGrad)"
+          />
+        );
+
+      case "gradient-fade":
+        return (
+          <rect x="0" y="0" width="400" height="78" fill="url(#fadingGradient)" />
+        );
+
+      case "wave":
+        return (
+          <path
+            d="M0,60 C80,20 120,100 200,60 C280,20 320,100 400,60 L400,78 L0,78 Z"
+            fill="url(#chevGrad)"
+          />
+        );
+
+      case "diagonal":
+        return (
+          <polygon points="0,78 0,30 400,60 400,78" fill="url(#chevGrad)" />
+        );
+
+      case "arc":
+        return <path d="M0,78 Q200,20 400,78 Z" fill="url(#chevGrad)" />;
+
+      case "chevron":
+      default:
+        return (
+          <>
+            <polygon
+              points="0,78 0,54 100,10 200,54 300,10 400,54 400,78"
+              fill="rgba(0,80,140,0.25)"
+              transform="translate(0,4)"
+            />
+            <polygon
+              points="0,78 0,52 100,8 200,52 300,8 400,52 400,78"
+              fill="#1aaede"
+            />
+            <polygon
+              points="0,78 0,52 100,8 200,52 300,8 400,52 400,78"
+              fill="url(#chevGrad)"
+            />
+          </>
+        );
+    }
+  };
+
   return (
     <div
       className="absolute bottom-0 left-0 w-full"
@@ -17,36 +93,23 @@ function ChevronBanner({ monthName, fading }) {
         preserveAspectRatio="none"
         width="100%"
         height="78"
-        xmlns="http://www.w3.org/2000/svg"
       >
-        {/* Shadow / depth layer */}
-        <polygon
-          points="0,78 0,54 100,10 200,54 300,10 400,54 400,78"
-          fill="rgba(0,80,140,0.25)"
-          transform="translate(0,4)"
-        />
-
-        {/* Main blue shape */}
-        <polygon
-          points="0,78 0,52 100,8 200,52 300,8 400,52 400,78"
-          fill="#1aaede"
-        />
-
-        {/* Gradient sheen for depth */}
-        <polygon
-          points="0,78 0,52 100,8 200,52 300,8 400,52 400,78"
-          fill="url(#chevGrad)"
-        />
-
+        {/* ✅ Both gradients defined here, inside the SVG */}
         <defs>
           <linearGradient id="chevGrad" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="rgba(255,255,255,0.18)" />
             <stop offset="100%" stopColor="rgba(0,0,0,0.08)" />
           </linearGradient>
+          <linearGradient id="fadingGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="rgba(26,174,222,0)" />
+            <stop offset="80%" stopColor="rgba(26,174,222,0.4)" />
+            <stop offset="100%" stopColor="rgba(26,174,222,0.8)" />
+          </linearGradient>
         </defs>
+
+        {renderShape()}
       </svg>
 
-      {/* Year + Month name */}
       <div
         className="absolute right-5 flex flex-col items-end"
         style={{ bottom: 10 }}
@@ -58,7 +121,6 @@ function ChevronBanner({ monthName, fading }) {
             fontWeight: 300,
             letterSpacing: "0.18em",
             lineHeight: 1,
-            fontFamily: "sans-serif",
           }}
         >
           {YEAR}
@@ -71,7 +133,6 @@ function ChevronBanner({ monthName, fading }) {
             fontWeight: 800,
             letterSpacing: "0.12em",
             lineHeight: 1.1,
-            fontFamily: "sans-serif",
             textShadow: "0 1px 4px rgba(0,0,0,0.2)",
           }}
         >
@@ -82,7 +143,21 @@ function ChevronBanner({ monthName, fading }) {
   );
 }
 
-/** Full photo section: landscape image + chevron banner overlay */
+const MONTH_STYLES = {
+  JANUARY: "triangle",
+  FEBRUARY: "diagonal",
+  MARCH: "arc",
+  APRIL: "arc",
+  MAY: "wave",
+  JUNE: "arc",
+  JULY: "diagonal",
+  AUGUST: "wave",
+  SEPTEMBER: "arc",
+  OCTOBER: "diagonal",
+  NOVEMBER: "wave",
+  DECEMBER: "wave",
+};
+
 export function PhotoSection({ imageUrl, monthName, fading }) {
   return (
     <div className="relative overflow-hidden" style={{ height: 215 }}>
@@ -95,8 +170,11 @@ export function PhotoSection({ imageUrl, monthName, fading }) {
           opacity: fading ? 0 : 1,
         }}
       />
-
-      <ChevronBanner monthName={monthName} fading={fading} />
+      <ChevronBanner
+        monthName={monthName}
+        fading={fading}
+        variant={MONTH_STYLES[monthName.toUpperCase()] || "chevron"}
+      />
     </div>
   );
 }

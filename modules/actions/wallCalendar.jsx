@@ -119,14 +119,7 @@ export function WallCalendar() {
   };
 
 
-  // const jumpToMonth = (month) => {
-  //   if (month === currentMonth) return;
-  //   setFading(true);
-  //   setTimeout(() => {
-  //     setCurrentMonth(month);
-  //     setFading(false);
-  //   }, 220);
-  // };
+  
 
   // Preload adjacent month images
   useEffect(() => {
