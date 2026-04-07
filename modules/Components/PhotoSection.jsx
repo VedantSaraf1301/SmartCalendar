@@ -2,7 +2,7 @@
 import React from "react";
 import { YEAR } from "./constants";
 
-/** Blue double-chevron SVG wave that overlays the bottom of the photo */
+
 function ChevronBanner({ monthName, fading }) {
   return (
     <div
