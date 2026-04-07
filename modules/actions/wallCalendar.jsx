@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { MONTH_NAMES, MONTH_IMAGES, YEAR } from "../Components/constants";
 import { getCalendarGrid } from "../Components/utils";
 import { CoilStrip } from "../Components/CoilStrip";
@@ -83,6 +83,158 @@ function WallTexture() {
   );
 }
 
+// Drag hint overlay — fades in on first load, disappears after first drag
+function DragHint({ visible }) {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        display: "flex",
+        alignItems: "flex-end",
+        justifyContent: "center",
+        pointerEvents: "none",
+        opacity: visible ? 1 : 0,
+        transition: "opacity 0.5s ease",
+        zIndex: 20,
+        paddingBottom: 24,
+      }}
+    >
+      <div
+        style={{
+          background: "rgba(0,0,0,0.45)",
+          borderRadius: 12,
+          padding: "8px 16px",
+          color: "#fff",
+          fontSize: 12,
+          fontWeight: 600,
+          letterSpacing: "0.08em",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 2,
+          backdropFilter: "blur(4px)",
+        }}
+      >
+        <span style={{ fontSize: 18, lineHeight: 1 }}>↑</span>
+        <span>Drag up to flip</span>
+      </div>
+    </div>
+  );
+}
+
+// The draggable calendar card — vertical flip like a real wall calendar
+// Drag UP → next month (page curls over the top spiral)
+// Drag DOWN → prev month (page unfurls back down)
+function DraggableCard({ children, onFlip, style, className }) {
+  const THRESHOLD = 65;    // px vertical drag to commit flip
+  const MAX_TILT  = 40;    // max rotateX degrees during live drag
+
+  const dragRef = useRef(null);  // { startY }
+  const cardRef = useRef(null);
+  const [tilt,     setTilt]     = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const [showHint, setShowHint] = useState(true);
+  const [flipClass, setFlipClass] = useState("");
+
+  // Hide hint after 3s
+  useEffect(() => {
+    const t = setTimeout(() => setShowHint(false), 3000);
+    return () => clearTimeout(t);
+  }, []);
+
+  const getY = (e) => e.touches ? e.touches[0].clientY : e.clientY;
+
+  const onStart = useCallback((e) => {
+    if (e.target.closest("button")) return;
+    dragRef.current = { startY: getY(e) };
+    setDragging(true);
+    setShowHint(false);
+  }, []);
+
+  const onMove = useCallback((e) => {
+    if (!dragging || !dragRef.current) return;
+    const dy = getY(e) - dragRef.current.startY;
+    // Negative dy = dragging up = next month (page lifts from bottom)
+    // Clamp: upward gives negative rotateX (bottom lifts toward viewer)
+    const angle = Math.max(-MAX_TILT, Math.min(MAX_TILT, -(dy / THRESHOLD) * MAX_TILT));
+    setTilt(angle);
+  }, [dragging]);
+
+  const onEnd = useCallback((e) => {
+    if (!dragging || !dragRef.current) return;
+    const endY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
+    const dy   = endY - dragRef.current.startY;
+
+    if (Math.abs(dy) >= THRESHOLD) {
+      // dy < 0 = dragged UP → next month
+      const goNext = dy < 0;
+      setTilt(0);
+      setDragging(false);
+      dragRef.current = null;
+
+      const exitClass  = goNext ? "calendar-flip-exit-up"   : "calendar-flip-exit-down";
+      const enterClass = goNext ? "calendar-flip-enter-up"  : "calendar-flip-enter-down";
+      const delta      = goNext ? 1 : -1;
+
+      setFlipClass(exitClass);
+      setTimeout(() => {
+        onFlip(delta);
+        setFlipClass(enterClass);
+        setTimeout(() => setFlipClass(""), 350);
+      }, 280);
+    } else {
+      // Snap back with a spring feel
+      setTilt(0);
+      setDragging(false);
+      dragRef.current = null;
+    }
+  }, [dragging, onFlip]);
+
+  // Global listeners follow the cursor even outside the card
+  useEffect(() => {
+    if (!dragging) return;
+    const mm = (e) => onMove(e);
+    const mu = (e) => onEnd(e);
+    window.addEventListener("mousemove", mm);
+    window.addEventListener("mouseup",   mu);
+    window.addEventListener("touchmove", mm, { passive: true });
+    window.addEventListener("touchend",  mu);
+    return () => {
+      window.removeEventListener("mousemove", mm);
+      window.removeEventListener("mouseup",   mu);
+      window.removeEventListener("touchmove", mm);
+      window.removeEventListener("touchend",  mu);
+    };
+  }, [dragging, onMove, onEnd]);
+
+  // Live rotateX tilt — pivot at the top edge, bottom lifts toward viewer
+  const dragTransform = dragging && tilt !== 0
+    ? `perspective(1100px) rotateX(${tilt}deg) rotate(0.15deg)`
+    : undefined;
+
+  return (
+    <div
+      ref={cardRef}
+      className={`${className ?? ""} ${flipClass}`}
+      style={{
+        ...style,
+        cursor: dragging ? "grabbing" : "grab",
+        transform: dragTransform ?? style?.transform,
+        transformOrigin: "top center",
+        transition: dragging ? "none" : (flipClass ? "none" : "transform 0.3s cubic-bezier(0.2,0,0.4,1)"),
+        userSelect: "none",
+        position: "relative",
+      }}
+      onMouseDown={onStart}
+      onTouchStart={onStart}
+    >
+      <DragHint visible={showHint} />
+      {children}
+    </div>
+  );
+}
+
 
 export function WallCalendar() {
   const today = new Date();
@@ -102,6 +254,13 @@ export function WallCalendar() {
       setFading(false);
     }, 220);
   };
+
+  // Used by the drag gesture — no fading needed, animation handles it
+  const flipMonth = useCallback((delta) => {
+    setCurrentMonth((m) => (m + delta + 12) % 12);
+    setStartDate(null);
+    setEndDate(null);
+  }, []);
 
   const jumpToMonth = (month) => {
     if (month === currentMonth) return;
@@ -130,6 +289,27 @@ export function WallCalendar() {
       img.src = MONTH_IMAGES[m];
     });
   }, [currentMonth]);
+
+  // Shared card inner content
+  const cardInner = (
+    <>
+      <CoilStrip />
+      <PhotoSection
+        imageUrl={MONTH_IMAGES[currentMonth]}
+        monthName={MONTH_NAMES[currentMonth]}
+        fading={fading}
+      />
+      <CalendarGrid days={calendarDays} currentMonth={currentMonth} startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
+
+      <div
+        className="absolute bottom-0 left-0 right-0 h-2 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(to bottom, transparent, rgba(0,0,0,0.04))",
+        }}
+      />
+    </>
+  );
 
   return (
     <div
@@ -161,33 +341,18 @@ export function WallCalendar() {
           <WallNail />
 
          
-          <div
-            className="relative bg-white overflow-hidden"
+          <DraggableCard
+            onFlip={flipMonth}
             style={{
               marginTop: 14,
               borderRadius: "0 0 10px 10px",
               transform: "rotate(0.15deg)",
+              background: "#fff",
+              overflow: "hidden",
             }}
           >
-            <CoilStrip />
-
-            <PhotoSection
-              imageUrl={MONTH_IMAGES[currentMonth]}
-              monthName={MONTH_NAMES[currentMonth]}
-              fading={fading}
-            />
-
-            <CalendarGrid days={calendarDays} currentMonth={currentMonth} startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
-
-         
-            <div
-              className="absolute bottom-0 left-0 right-0 h-2 pointer-events-none"
-              style={{
-                background:
-                  "linear-gradient(to bottom, transparent, rgba(0,0,0,0.04))",
-              }}
-            />
-          </div>
+            {cardInner}
+          </DraggableCard>
 
           <PageStack />
         </div>
@@ -231,32 +396,18 @@ export function WallCalendar() {
 
           <WallNail />
 
-          <div
-            className="relative bg-white overflow-hidden"
+          <DraggableCard
+            onFlip={flipMonth}
             style={{
               marginTop: 14,
               borderRadius: "0 0 10px 10px",
               transform: "rotate(0.15deg)",
+              background: "#fff",
+              overflow: "hidden",
             }}
           >
-            <CoilStrip />
-
-            <PhotoSection
-              imageUrl={MONTH_IMAGES[currentMonth]}
-              monthName={MONTH_NAMES[currentMonth]}
-              fading={fading}
-            />
-
-            <CalendarGrid days={calendarDays} currentMonth={currentMonth} startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
-
-            <div
-              className="absolute bottom-0 left-0 right-0 h-2 pointer-events-none"
-              style={{
-                background:
-                  "linear-gradient(to bottom, transparent, rgba(0,0,0,0.04))",
-              }}
-            />
-          </div>
+            {cardInner}
+          </DraggableCard>
 
           <PageStack />
         </div>

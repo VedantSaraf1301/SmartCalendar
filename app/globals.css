@@ -127,3 +127,39 @@
     @apply font-sans;
     }
 }
+
+/* ── Calendar page-flip drag animations (real wall-calendar vertical flip) ── */
+/* Pages rotate around the TOP edge — bottom curls UP over the spine, just like a real calendar */
+
+@keyframes pageFlipUp {
+  0%   { transform: perspective(1100px) rotateX(0deg);    opacity: 1; }
+  55%  { transform: perspective(1100px) rotateX(-65deg);  opacity: 0.6; }
+  100% { transform: perspective(1100px) rotateX(-90deg);  opacity: 0; }
+}
+@keyframes pageEnterFromAbove {
+  0%   { transform: perspective(1100px) rotateX(90deg);   opacity: 0; }
+  45%  { transform: perspective(1100px) rotateX(18deg);   opacity: 0.85; }
+  100% { transform: perspective(1100px) rotateX(0deg);    opacity: 1; }
+}
+/* Reverse: prev-month — page comes back DOWN */
+@keyframes pageFlipDown {
+  0%   { transform: perspective(1100px) rotateX(0deg);   opacity: 1; }
+  100% { transform: perspective(1100px) rotateX(90deg);  opacity: 0; }
+}
+@keyframes pageEnterFromBelow {
+  0%   { transform: perspective(1100px) rotateX(-90deg); opacity: 0; }
+  100% { transform: perspective(1100px) rotateX(0deg);   opacity: 1; }
+}
+
+/* All flip classes must pivot around the top-center edge */
+.calendar-flip-exit-up,
+.calendar-flip-enter-down,
+.calendar-flip-exit-down,
+.calendar-flip-enter-up {
+  transform-origin: top center;
+}
+
+.calendar-flip-exit-up   { animation: pageFlipUp        0.30s cubic-bezier(0.4,0,0.6,1) forwards; transform-origin: top center; }
+.calendar-flip-enter-up  { animation: pageEnterFromAbove 0.32s cubic-bezier(0.2,0,0.4,1) forwards; transform-origin: top center; }
+.calendar-flip-exit-down { animation: pageFlipDown       0.30s cubic-bezier(0.4,0,0.6,1) forwards; transform-origin: top center; }
+.calendar-flip-enter-down{ animation: pageEnterFromBelow 0.32s cubic-bezier(0.2,0,0.4,1) forwards; transform-origin: top center; }
