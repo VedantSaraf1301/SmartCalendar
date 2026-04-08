@@ -1,7 +1,7 @@
 "use client"
 import React from "react";
 
-
+// CoilRing compoenent
 const CoilRing = () => (
   <div
     style={{
@@ -18,7 +18,7 @@ const CoilRing = () => (
   />
 );
 
-
+// CoilStrip component
 export function CoilStrip() {
   return (
     <div

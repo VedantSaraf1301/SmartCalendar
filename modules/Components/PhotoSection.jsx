@@ -2,6 +2,8 @@
 import React from "react";
 import { YEAR } from "./constants";
 
+
+//Different types of shapes to use with the images
 export default function ChevronBanner({
   monthName,
   fading,

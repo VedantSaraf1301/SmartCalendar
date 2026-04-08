@@ -2,7 +2,7 @@
 import React from "react";
 import { MONTH_NAMES } from "./constants";
 
-
+//Logic behind the month dots
 export function MonthDots({ currentMonth, onSelect }) {
   return (
     <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">

@@ -1,6 +1,9 @@
 "use client"
 import { useState, useCallback, useEffect } from "react";
 
+
+//Idea is to use a key that is unique to the day, month, and year or month and year
+//using that will access local storage that will also be efficient
 const key = (year, month, day = null) =>
   day !== null
     ? `calendar_notes_${year}_${month}_${day}`

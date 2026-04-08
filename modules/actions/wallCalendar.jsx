@@ -9,6 +9,8 @@ import { MonthDots } from "../Components/MonthDots";
 import { NavArrow } from "../Components/NavArrow";
 
 
+//The wallCalendar component merges all the other components together
+
 function WallNail() {
   return (
     <div
@@ -123,19 +125,19 @@ function DragHint({ visible }) {
   );
 }
 
-
+//Main flip card logic
 function DraggableCard({ children, onFlip, style, className }) {
-  const THRESHOLD = 65;    
-  const MAX_TILT  = 40;    
+  const THRESHOLD = 65;
+  const MAX_TILT = 40;
 
   const dragRef = useRef(null);  // { startY }
   const cardRef = useRef(null);
-  const [tilt,     setTilt]     = useState(0);
+  const [tilt, setTilt] = useState(0);
   const [dragging, setDragging] = useState(false);
   const [showHint, setShowHint] = useState(true);
   const [flipClass, setFlipClass] = useState("");
 
-  
+
   useEffect(() => {
     const t = setTimeout(() => setShowHint(false), 3000);
     return () => clearTimeout(t);
@@ -160,18 +162,18 @@ function DraggableCard({ children, onFlip, style, className }) {
   const onEnd = useCallback((e) => {
     if (!dragging || !dragRef.current) return;
     const endY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
-    const dy   = endY - dragRef.current.startY;
+    const dy = endY - dragRef.current.startY;
 
     if (Math.abs(dy) >= THRESHOLD) {
-      
+
       const goNext = dy < 0;
       setTilt(0);
       setDragging(false);
       dragRef.current = null;
 
-      const exitClass  = goNext ? "calendar-flip-exit-up"   : "calendar-flip-exit-down";
-      const enterClass = goNext ? "calendar-flip-enter-up"  : "calendar-flip-enter-down";
-      const delta      = goNext ? 1 : -1;
+      const exitClass = goNext ? "calendar-flip-exit-up" : "calendar-flip-exit-down";
+      const enterClass = goNext ? "calendar-flip-enter-up" : "calendar-flip-enter-down";
+      const delta = goNext ? 1 : -1;
 
       setFlipClass(exitClass);
       setTimeout(() => {
@@ -180,27 +182,27 @@ function DraggableCard({ children, onFlip, style, className }) {
         setTimeout(() => setFlipClass(""), 350);
       }, 280);
     } else {
-      
+
       setTilt(0);
       setDragging(false);
       dragRef.current = null;
     }
   }, [dragging, onFlip]);
 
-  
+
   useEffect(() => {
     if (!dragging) return;
     const mm = (e) => onMove(e);
     const mu = (e) => onEnd(e);
     window.addEventListener("mousemove", mm);
-    window.addEventListener("mouseup",   mu);
+    window.addEventListener("mouseup", mu);
     window.addEventListener("touchmove", mm, { passive: true });
-    window.addEventListener("touchend",  mu);
+    window.addEventListener("touchend", mu);
     return () => {
       window.removeEventListener("mousemove", mm);
-      window.removeEventListener("mouseup",   mu);
+      window.removeEventListener("mouseup", mu);
       window.removeEventListener("touchmove", mm);
-      window.removeEventListener("touchend",  mu);
+      window.removeEventListener("touchend", mu);
     };
   }, [dragging, onMove, onEnd]);
 
@@ -251,7 +253,7 @@ export function WallCalendar() {
     }, 220);
   };
 
-  
+
   const flipMonth = useCallback((delta) => {
     setCurrentMonth((m) => (m + delta + 12) % 12);
     setStartDate(null);
@@ -265,7 +267,7 @@ export function WallCalendar() {
     setTimeout(() => {
       setCurrentMonth(month);
 
-     
+
       setStartDate(null);
       setEndDate(null);
 
@@ -274,7 +276,7 @@ export function WallCalendar() {
   };
 
 
-  
+
 
 
   useEffect(() => {
@@ -286,7 +288,7 @@ export function WallCalendar() {
     });
   }, [currentMonth]);
 
-  
+
   const cardInner = (
     <>
       <CoilStrip />
@@ -317,13 +319,13 @@ export function WallCalendar() {
     >
       <WallTexture />
 
-      
+
       <div className="hidden sm:flex relative items-center gap-6">
         <NavArrow direction="prev" onClick={() => changeMonth(-1)} />
 
-       
+
         <div className="relative" style={{ width: 380 }}>
-        
+
           <div
             className="absolute inset-0"
             style={{
@@ -336,7 +338,7 @@ export function WallCalendar() {
 
           <WallNail />
 
-         
+
           <DraggableCard
             onFlip={flipMonth}
             style={{
@@ -356,7 +358,7 @@ export function WallCalendar() {
         <NavArrow direction="next" onClick={() => changeMonth(1)} />
       </div>
 
-     
+
       <div className="hidden sm:flex gap-2 mt-8">
         {Array.from({ length: 12 }).map((_, i) => (
           <button
@@ -377,9 +379,9 @@ export function WallCalendar() {
       </div>
 
       <div className="flex sm:hidden flex-col items-center gap-5 w-full">
-    
+
         <div className="relative w-full" style={{ maxWidth: 380 }}>
-     
+
           <div
             className="absolute inset-0"
             style={{
@@ -408,7 +410,7 @@ export function WallCalendar() {
           <PageStack />
         </div>
 
-        
+
         <div className="flex gap-2">
           {Array.from({ length: 12 }).map((_, i) => (
             <button
@@ -428,7 +430,7 @@ export function WallCalendar() {
           ))}
         </div>
 
-      
+
         <div className="flex justify-between w-full" style={{ maxWidth: 380 }}>
           <NavArrow direction="prev" onClick={() => changeMonth(-1)} />
           <NavArrow direction="next" onClick={() => changeMonth(1)} />
