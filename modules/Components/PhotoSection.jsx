@@ -9,15 +9,6 @@ export default function ChevronBanner({
 }) {
   const renderShape = () => {
     switch (variant) {
-
-      case "stepped":
-        return (
-          <path
-            d="M0,78 L0,40 L100,40 L100,50 L200,50 L200,35 L300,35 L300,50 L400,50 L400,78 Z"
-            fill="url(#chevGrad)"
-          />
-        );
-
       case "triangle":
         return <polygon points="0,78 200,30 400,78" fill="url(#chevGrad)" />;
 
@@ -27,19 +18,6 @@ export default function ChevronBanner({
             d="M0,65 C100,35 100,95 200,65 C300,35 300,95 400,65 L400,78 L0,78 Z"
             fill="url(#chevGrad)"
           />
-        );
-
-      case "jagged":
-        return (
-          <path
-            d="M0,78 L0,50 L50,70 L100,40 L150,65 L200,45 L250,60 L300,50 L350,70 L400,45 L400,78 Z"
-            fill="url(#chevGrad)"
-          />
-        );
-
-      case "gradient-fade":
-        return (
-          <rect x="0" y="0" width="400" height="78" fill="url(#fadingGradient)" />
         );
 
       case "wave":
@@ -139,7 +117,7 @@ const MONTH_STYLES = {
   JUNE: "arc",
   JULY: "diagonal",
   AUGUST: "wave",
-  SEPTEMBER: "arc",
+  SEPTEMBER: "chevron",
   OCTOBER: "diagonal",
   NOVEMBER: "wave",
   DECEMBER: "wave",

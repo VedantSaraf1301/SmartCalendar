@@ -10,7 +10,7 @@ export function DayNotePopover({ year, month, day, initialNote, onSave, onClose 
   const [val, setVal] = useState(initialNote ?? "");
   const textareaRef = useRef(null);
 
-  // Auto-focus on open
+  // Auto focus on open
   useEffect(() => {
     textareaRef.current?.focus();
   }, []);
@@ -40,7 +40,7 @@ export function DayNotePopover({ year, month, day, initialNote, onSave, onClose 
         justifyContent: "center",
       }}
     >
-      {/* Card — stop click propagating to backdrop */}
+      {/* Card */}
       <div
         onClick={e => e.stopPropagation()}
         style={{

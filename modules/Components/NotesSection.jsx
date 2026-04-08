@@ -12,12 +12,12 @@ export function NotesSection({ year, month }) {
   const { monthNote, saveMonthNote } = useCalendarNotes(year, month);
   const [val, setVal] = useState(monthNote);
 
-  // Sync val when month/year changes (user navigates)
+  
   useEffect(() => {
     setVal(monthNote);
   }, [monthNote]);
 
-  // Debounced auto-save
+  
   useEffect(() => {
     const t = setTimeout(() => saveMonthNote(val), 600);
     return () => clearTimeout(t);

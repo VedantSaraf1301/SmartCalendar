@@ -83,7 +83,7 @@ function WallTexture() {
   );
 }
 
-// Drag hint overlay — fades in on first load, disappears after first drag
+
 function DragHint({ visible }) {
   return (
     <div
@@ -123,12 +123,10 @@ function DragHint({ visible }) {
   );
 }
 
-// The draggable calendar card — vertical flip like a real wall calendar
-// Drag UP → next month (page curls over the top spiral)
-// Drag DOWN → prev month (page unfurls back down)
+
 function DraggableCard({ children, onFlip, style, className }) {
-  const THRESHOLD = 65;    // px vertical drag to commit flip
-  const MAX_TILT  = 40;    // max rotateX degrees during live drag
+  const THRESHOLD = 65;    
+  const MAX_TILT  = 40;    
 
   const dragRef = useRef(null);  // { startY }
   const cardRef = useRef(null);
@@ -137,7 +135,7 @@ function DraggableCard({ children, onFlip, style, className }) {
   const [showHint, setShowHint] = useState(true);
   const [flipClass, setFlipClass] = useState("");
 
-  // Hide hint after 3s
+  
   useEffect(() => {
     const t = setTimeout(() => setShowHint(false), 3000);
     return () => clearTimeout(t);
@@ -155,8 +153,6 @@ function DraggableCard({ children, onFlip, style, className }) {
   const onMove = useCallback((e) => {
     if (!dragging || !dragRef.current) return;
     const dy = getY(e) - dragRef.current.startY;
-    // Negative dy = dragging up = next month (page lifts from bottom)
-    // Clamp: upward gives negative rotateX (bottom lifts toward viewer)
     const angle = Math.max(-MAX_TILT, Math.min(MAX_TILT, -(dy / THRESHOLD) * MAX_TILT));
     setTilt(angle);
   }, [dragging]);
@@ -167,7 +163,7 @@ function DraggableCard({ children, onFlip, style, className }) {
     const dy   = endY - dragRef.current.startY;
 
     if (Math.abs(dy) >= THRESHOLD) {
-      // dy < 0 = dragged UP → next month
+      
       const goNext = dy < 0;
       setTilt(0);
       setDragging(false);
@@ -184,14 +180,14 @@ function DraggableCard({ children, onFlip, style, className }) {
         setTimeout(() => setFlipClass(""), 350);
       }, 280);
     } else {
-      // Snap back with a spring feel
+      
       setTilt(0);
       setDragging(false);
       dragRef.current = null;
     }
   }, [dragging, onFlip]);
 
-  // Global listeners follow the cursor even outside the card
+  
   useEffect(() => {
     if (!dragging) return;
     const mm = (e) => onMove(e);
@@ -255,7 +251,7 @@ export function WallCalendar() {
     }, 220);
   };
 
-  // Used by the drag gesture — no fading needed, animation handles it
+  
   const flipMonth = useCallback((delta) => {
     setCurrentMonth((m) => (m + delta + 12) % 12);
     setStartDate(null);
@@ -290,7 +286,7 @@ export function WallCalendar() {
     });
   }, [currentMonth]);
 
-  // Shared card inner content
+  
   const cardInner = (
     <>
       <CoilStrip />

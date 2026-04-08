@@ -20,9 +20,7 @@ export function useCalendarNotes(year, month) {
     return notes;
   });
 
-  // Re-read from localStorage when the month/year changes (user navigates).
-  // useState initializers only fire once on mount, so without this effect
-  // the state would stay stale at the initial month forever.
+  
   useEffect(() => {
     if (typeof window === "undefined") return;
     setMonthNote(localStorage.getItem(key(year, month)) ?? "");
@@ -51,4 +49,4 @@ export function useCalendarNotes(year, month) {
   }, [year, month]);
 
   return { monthNote, dayNotes, saveMonthNote, saveDayNote };
-}
+}

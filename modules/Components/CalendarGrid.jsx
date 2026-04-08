@@ -9,7 +9,7 @@ const MONTH_NAMES = [
   "July", "August", "September", "October", "November", "December",
 ];
 
-/* ─── Day Headers ─────────────────────────────────────────────────────────── */
+
 function DayHeaders() {
   return (
     <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", marginBottom: 4 }}>
@@ -33,24 +33,19 @@ function DayHeaders() {
   );
 }
 
-/* ─── Hover Note Tooltip ──────────────────────────────────────────────────── */
-/**
- * Inline editable card that appears above a date cell on hover.
- * Stores the note in localStorage via the onNoteChange callback.
- * colIndex (0-6) is used to flip horizontal alignment on edge columns.
- */
+
 function DayNoteTooltip({ day, month, year, note, onNoteChange, colIndex }) {
   const [val, setVal] = useState(note);
   const [saved, setSaved] = useState(false);
   const textareaRef = useRef(null);
 
-  // Sync local val if external note changes (e.g. month navigation)
+  
   useEffect(() => { setVal(note); }, [note]);
 
-  // Auto-focus textarea when tooltip opens
+  
   useEffect(() => { textareaRef.current?.focus(); }, []);
 
-  // Debounced auto-save — 600 ms after the user stops typing
+  
   useEffect(() => {
     if (val === note) return;
     const t = setTimeout(() => {
@@ -61,7 +56,7 @@ function DayNoteTooltip({ day, month, year, note, onNoteChange, colIndex }) {
     return () => clearTimeout(t);
   }, [val]);
 
-  // Smart horizontal offset so the card doesn't clip the left/right edge
+  
   const isRightEdge = colIndex >= 5;
   const isLeftEdge  = colIndex <= 1;
   const hPos = isRightEdge
@@ -70,14 +65,14 @@ function DayNoteTooltip({ day, month, year, note, onNoteChange, colIndex }) {
     ? { left: 0 }
     : { left: "50%", transform: "translateX(-50%)" };
 
-  // Arrow offset mirrors the card alignment
+  
   const arrowLeft = isRightEdge ? "auto" : isLeftEdge ? 12 : "50%";
   const arrowRight = isRightEdge ? 12 : "auto";
   const arrowTransform = (!isRightEdge && !isLeftEdge) ? "translateX(-50%) rotate(45deg)" : "rotate(45deg)";
 
   return (
     <div
-      onClick={(e) => e.stopPropagation()}   // don't fire range-selection click
+      onClick={(e) => e.stopPropagation()}   
       style={{
         position: "absolute",
         bottom: "calc(100% + 8px)",
@@ -156,11 +151,7 @@ function DayNoteTooltip({ day, month, year, note, onNoteChange, colIndex }) {
   );
 }
 
-/* ─── Day Cell ────────────────────────────────────────────────────────────── */
-/**
- * dayNote  – current note string for this day (empty string if none)
- * onNoteChange – callback(text) that persists note to localStorage
- */
+
 function DayCell({ d, index, year, month, startDate, endDate, setStartDate, setEndDate, dayNote, onNoteChange }) {
   const today    = new Date();
   const colIndex = index % 7;
@@ -176,7 +167,7 @@ function DayCell({ d, index, year, month, startDate, endDate, setStartDate, setE
     month === today.getMonth() &&
     year === today.getFullYear();
 
-  /* Range selection click handler */
+  /* Range selection handler */
   const handleClick = () => {
     if (!isCurrent) return;
 
@@ -207,7 +198,7 @@ function DayCell({ d, index, year, month, startDate, endDate, setStartDate, setE
     }
   };
 
-  /* Range highlight band */
+  /* Range band highlighter */
   const isStart   = startDate && cellDate.toDateString() === startDate.toDateString();
   const isEnd     = endDate   && cellDate.toDateString() === endDate.toDateString();
   const isInRange = startDate && endDate && cellDate > startDate && cellDate < endDate;
@@ -224,7 +215,7 @@ function DayCell({ d, index, year, month, startDate, endDate, setStartDate, setE
     bandStyle = { position: "absolute", top: "50%", transform: "translateY(-50%)", left: 0, right: 0, height: bandHeight, background: bandColor, zIndex: 0 };
   }
 
-  /* Date number circle style */
+  
   let dotStyle = {
     position: "relative", zIndex: 1,
     width: 26, height: 26,
@@ -285,7 +276,7 @@ function DayCell({ d, index, year, month, startDate, endDate, setStartDate, setE
   );
 }
 
-/* ─── Range Badge ─────────────────────────────────────────────────────────── */
+
 function RangeBadge({ startDate, endDate }) {
   if (!startDate || !endDate) {
     if (startDate) {
@@ -316,13 +307,13 @@ function RangeBadge({ startDate, endDate }) {
   );
 }
 
-/* ─── Calendar Grid ───────────────────────────────────────────────────────── */
+
 export function CalendarGrid({ days, currentMonth, startDate, endDate, setStartDate, setEndDate }) {
-  // currentMonth is a plain 0-11 number passed from WallCalendar
+  
   const year  = YEAR;
   const month = currentMonth;
 
-  // Single shared hook instance — all day notes + month note for this month
+  
   const { dayNotes, saveDayNote } = useCalendarNotes(year, month);
 
   return (
