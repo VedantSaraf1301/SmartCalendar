@@ -1,8 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🗓️ Smart Calendar
 
-## Getting Started
+A beautiful, interactive **wall calendar** built with **Next.js 16** and **React 19**. Flip through months like a real wall calendar, select date ranges, and add notes — all stored locally in your browser.
 
-First, run the development server:
+---
+
+## ✨ Features
+
+- 📅 **Wall Calendar UI** — Realistic page-flip animation (drag up/down or use nav arrows)
+- 🗒️ **Month Notes** — Write a note for each month in the sidebar (auto-saved)
+- 📝 **Day Notes** — Hover over any date to add/view a note for that day (auto-saved)
+- 🔵 **Note Indicators** — Blue dot appears under dates that have notes
+- 🎯 **Date Range Selection** — Click two dates to highlight a range with a day-count badge
+- 💾 **localStorage Persistence** — All notes survive page refreshes, no backend needed
+- 📱 **Responsive** — Works on both desktop and mobile
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Node.js** `v18.17` or later
+- **npm**, **yarn**, **pnpm**, or **bun**
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/VedantSaraf1301/SmartCalendar.git
+cd SmartCalendar
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+### 3. Run the development server
 
 ```bash
 npm run dev
@@ -10,27 +48,92 @@ npm run dev
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 4. Open in your browser
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Visit [http://localhost:3000](http://localhost:3000) 🎉
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🛠️ Available Scripts
 
-To learn more about Next.js, take a look at the following resources:
+| Command | Description |
+|---|---|
+| `npm run dev` | Start the development server with hot-reload |
+| `npm run build` | Build the optimized production bundle |
+| `npm run start` | Start the production server (run `build` first) |
+| `npm run lint` | Run ESLint to check for code issues |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🗂️ Project Structure
 
-## Deploy on Vercel
+```
+smart_calendar/
+├── app/                        # Next.js App Router
+│   └── page.js                 # Root page
+├── modules/
+│   ├── actions/
+│   │   └── wallCalendar.jsx    # Main WallCalendar component + drag-flip logic
+│   ├── CalendarNotes/
+│   │   └── useCalendarNotes.js # Custom hook — reads/writes notes to localStorage
+│   └── Components/
+│       ├── CalendarGrid.jsx    # Calendar grid + hover note tooltips
+│       ├── NotesSection.jsx    # Month note sidebar textarea
+│       ├── DayNotePopOver.jsx  # Day note popover (utility)
+│       ├── PhotoSection.jsx    # Monthly photo header
+│       ├── CoilStrip.jsx       # Spiral binding decoration
+│       ├── NavArrow.jsx        # Prev/next navigation arrows
+│       ├── MonthDots.jsx       # Month indicator dots
+│       ├── constants.js        # YEAR, MONTH_NAMES, MONTH_IMAGES, DAY_LABELS
+│       └── utils.js            # getCalendarGrid() helper
+├── public/                     # Static assets
+├── next.config.mjs
+├── package.json
+└── README.md
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📝 How Notes Work
+
+Notes are stored in `localStorage` with the following key scheme:
+
+| Note Type | Key Format | Example |
+|---|---|---|
+| **Month note** | `calendar_notes_{year}_{month}` | `calendar_notes_2026_3` |
+| **Day note** | `calendar_notes_{year}_{month}_{day}` | `calendar_notes_2026_3_15` |
+
+- **Month notes** → type in the left sidebar panel
+- **Day notes** → hover over any date cell to open the inline editor
+
+Notes auto-save **600 ms** after you stop typing.
+
+---
+
+## 🧰 Tech Stack
+
+| Technology | Version | Purpose |
+|---|---|---|
+| [Next.js](https://nextjs.org) | 16.2.2 | React framework + App Router |
+| [React](https://react.dev) | 19.2.4 | UI library |
+| [Tailwind CSS](https://tailwindcss.com) | v4 | Utility-first styling |
+| [date-fns](https://date-fns.org) | 4.x | Date utilities |
+| [lucide-react](https://lucide.dev) | latest | Icons |
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repo
+2. Create a feature branch: `git checkout -b my-feature`
+3. Commit your changes: `git commit -m "feat: add my feature"`
+4. Push to the branch: `git push origin my-feature`
+5. Open a Pull Request on GitHub
+
+---
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
